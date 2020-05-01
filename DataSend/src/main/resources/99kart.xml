@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+			"https://www.springframework.org/dtd/spring-beans-2.0.dtd">
+			
+			<beans>
+			<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dmds">
+			<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+			<property name="url" value="jdbc:mysql://localhost:3306/DataStore"></property>
+			<property name="username" value="root"></property>
+			<property name="password" value="root"></property>
+			</bean>
+			
+			<bean class="org.springframework.jdbc.core.JdbcTemplate" id="jtemp">
+			<property name="dataSource" ref="dmds"></property>
+			</bean>
+			
+			<bean class="Com.cetpa.Dao.ImpMyDao" id="dao">
+			<property name="template" ref="jtemp"></property>
+			</bean>
+			
+			</beans>
