@@ -1,1 +1,1 @@
-web:java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $port target/com.99kart.DataSend
+web:java $JAVA_OPTS --port $port target/com.99kart.DataSend
