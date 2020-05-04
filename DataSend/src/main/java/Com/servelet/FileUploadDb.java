@@ -2,8 +2,14 @@ package Com.servelet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 import java.util.Random;
 
+import javax.mail.Message.RecipientType;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -11,9 +17,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.swing.JOptionPane;
+import javax.swing.text.html.MinimalHTMLWriter;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import Com.cetpa.MailAuth;
 import Com.cetpa.UploadMainFile;
 import Com.cetpa.Dao.ImpMyDao;
 
@@ -52,13 +61,13 @@ public class FileUploadDb extends HttpServlet {
 		int random = 0;
 	     Part filePart=request.getPart("myfile");
 	     if (filePart != null) {
-	            // prints out some information for debugging
-	            System.out.println(filePart.getName());
-	            System.out.println(filePart.getSize());
-	            System.out.println(filePart.getContentType());
-	            
 	            //get inputStream of filepart
 	            inputstream=filePart.getInputStream();
+	     }
+	     else 
+	     {
+	    	System.exit(1);
+	    	 
 	     }
 	     
 	     String message=null;   //message which will sent to client back 
@@ -70,7 +79,26 @@ public class FileUploadDb extends HttpServlet {
 	    	int done= mydao.storeDataInDb(new UploadMainFile(name, email, inputstream, random));
 	    	if(done>0)
 	    	{
-	    		message="File uploaded and saved into the database ";
+	    		Properties mailproperty =new Properties();
+	    		mailproperty.put("mail.smtp.host", "smtp.gmail.com");
+	    		mailproperty.put("mail.smtp.port", "587");
+	    		mailproperty.put("mail.smtp.starttls.enable", "true");
+	    		mailproperty.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+	    		mailproperty.put("mail.smtp.auth", "true");
+	    		
+	    		MailAuth Authorised=new MailAuth();
+	    		
+	    		Session session=Session.getDefaultInstance(mailproperty, Authorised);
+	    		MimeMessage mime=new MimeMessage(session);
+	    		mime.setHeader("99kart", "Password");
+	    		mime.setSubject("Password for the file that uploaded on 99kart.");
+	    		 InternetAddress internet=new InternetAddress(email);
+	    		 mime.setRecipient(RecipientType.TO,internet);
+	    		 mime.setContent("your password for the file name "+name+" is "+random+" ", "text/plain");
+	    		Transport.send(mime);
+	    		JOptionPane java=new JOptionPane();
+	    	    java.createDialog("file stored");
+	    	    
 	    	}
 	     }
 	     catch(Exception e)

@@ -67,7 +67,7 @@
                     </div>
 					<div style="margin-bottom:20px;text-align:left;">
                         <label style="font-size:18px;margin-right:45px;">Upload File</label>
-                        <input type="file" name="File" class="form-control" style="margin-top:5px;margin-left:-7px;">
+                        <input type="file" name="myfile" class="form-control" style="margin-top:5px;margin-left:-7px;">
                     </div>
 					<div style="margin-bottom:10px;">
 						<button type="submit" name="submit" class="btn">Submit</button>
